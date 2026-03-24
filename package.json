@@ -1,0 +1,13 @@
+{
+  "name": "openattitude-instruments",
+  "private": true,
+  "description": "Monorepo for @openattitude/core and FlightGear/OpenAttitude panel instrument packages",
+  "author": "Torsten Dreyer <torsten@t3r.de>",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "postinstall": "npm run build --workspaces",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "license": "LGPL-3.0-or-later"
+}

@@ -1,0 +1,53 @@
+{
+  "name": "@openattitude/steam-attitudegyro-senecaii",
+  "version": "0.1.0",
+  "description": "Steam-style attitude indicator (artificial horizon) for OpenAttitude",
+  "author": "Torsten Dreyer <torsten@t3r.de>",
+  "type": "module",
+  "main": "./dist/steam-attitudegyro-senecaii.js",
+  "module": "./dist/steam-attitudegyro-senecaii.js",
+  "exports": {
+    ".": {
+      "types": "./dist/steam-attitudegyro-senecaii.d.ts",
+      "import": "./dist/steam-attitudegyro-senecaii.js",
+      "default": "./dist/steam-attitudegyro-senecaii.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "dependencies": {
+    "@openattitude/core": "^0.1.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.5",
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^20.0.11",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.2",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.1",
+    "vue": "^3.5.30"
+  },
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "npm run build",
+    "dev:testbed": "vite --config vite.testbed.config.ts",
+    "build:testbed": "vite build --config vite.testbed.config.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "flightgear",
+    "openattitude",
+    "attitude-indicator",
+    "artificial-horizon",
+    "vue"
+  ],
+  "license": "LGPL-3.0-or-later",
+  "types": "./dist/steam-attitudegyro-senecaii.d.ts"
+}

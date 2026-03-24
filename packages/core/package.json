@@ -1,0 +1,51 @@
+{
+  "name": "@openattitude/core",
+  "version": "0.1.0",
+  "description": "Shared utilities for OpenAttitude panel packages",
+  "author": "Torsten Dreyer <torsten@t3r.de>",
+  "type": "module",
+  "main": "./dist/core.js",
+  "module": "./dist/core.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/core.js",
+      "default": "./dist/core.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.vue",
+    "**/math/math-global.ts"
+  ],
+  "peerDependencies": {
+    "@vueuse/core": "^14.0.0",
+    "pinia": "^3.0.0",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vueuse/core": "^14.2.1",
+    "@vitejs/plugin-vue": "^6.0.5",
+    "pinia": "^3.0.4",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.2",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.1",
+    "vue": "^3.5.30"
+  },
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "flightgear",
+    "openattitude",
+    "panel"
+  ],
+  "license": "LGPL-3.0-or-later",
+  "types": "./dist/index.d.ts"
+}

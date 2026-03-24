@@ -1,0 +1,19 @@
+<svg
+   width="500"
+   height="500"
+   viewBox="0 0 500 500"
+   preserveAspectRatio="xMinYMin meet"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <path
+    style="fill:#ffffff;stroke:#252525;stroke-width:1;"
+    d="m 243,51.34 7,-25.51 7,25.51 V 247.43 h -14 z" />
+
+  <circle
+       style="fill:none;stroke:#252525;stroke-width:13;"
+       cx="250"
+       cy="250"
+       r="9" />
+
+</svg>

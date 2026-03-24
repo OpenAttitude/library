@@ -1,0 +1,56 @@
+{
+  "name": "@openattitude/other-gps-generic",
+  "version": "0.1.0",
+  "description": "GPS moving-map tile view for OpenAttitude",
+  "author": "Torsten Dreyer <torsten@t3r.de>",
+  "type": "module",
+  "main": "./dist/other-gps-generic.js",
+  "module": "./dist/other-gps-generic.js",
+  "exports": {
+    ".": {
+      "types": "./dist/other-gps-generic.d.ts",
+      "import": "./dist/other-gps-generic.js",
+      "default": "./dist/other-gps-generic.js"
+    },
+    "./dist/other-gps-generic.css": "./dist/other-gps-generic.css",
+    "./style.css": "./dist/other-gps-generic.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.vue"
+  ],
+  "peerDependencies": {
+    "leaflet": "^1.9.0",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.5",
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^20.0.11",
+    "leaflet": "^1.9.4",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.2",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.1",
+    "vue": "^3.5.30"
+  },
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "npm run build",
+    "dev:testbed": "vite --config vite.testbed.config.ts",
+    "build:testbed": "vite build --config vite.testbed.config.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "flightgear",
+    "openattitude",
+    "gps",
+    "leaflet",
+    "vue"
+  ],
+  "license": "LGPL-3.0-or-later",
+  "types": "./dist/other-gps-generic.d.ts"
+}

@@ -1,0 +1,12 @@
+<svg
+   width="240"
+   height="15"
+   viewBox="0 0 240 15"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+   <path id="needle"
+     style="fill:#c31010;fill-opacity:1;stroke:#7d0808;stroke-width:1;stroke-linejoin:round;stroke-opacity:0.8;"
+       d="M 240,0 V 15 H 0 V 0 Z" />
+</svg>

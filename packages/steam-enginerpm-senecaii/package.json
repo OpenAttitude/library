@@ -1,0 +1,52 @@
+{
+  "name": "@openattitude/steam-enginerpm-senecaii",
+  "version": "0.1.0",
+  "description": "Steam-style SenecaII engine RPM gauge for OpenAttitude",
+  "author": "Torsten Dreyer <torsten@t3r.de>",
+  "type": "module",
+  "main": "./dist/steam-enginerpm-senecaii.js",
+  "module": "./dist/steam-enginerpm-senecaii.js",
+  "exports": {
+    ".": {
+      "types": "./dist/steam-enginerpm-senecaii.d.ts",
+      "import": "./dist/steam-enginerpm-senecaii.js",
+      "default": "./dist/steam-enginerpm-senecaii.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "dependencies": {
+    "@openattitude/core": "^0.1.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.5",
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^20.0.11",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.2",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.1",
+    "vue": "^3.5.30"
+  },
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "npm run build",
+    "dev:testbed": "vite --config vite.testbed.config.ts",
+    "build:testbed": "vite build --config vite.testbed.config.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "flightgear",
+    "openattitude",
+    "rpm",
+    "vue"
+  ],
+  "license": "LGPL-3.0-or-later",
+  "types": "./dist/steam-enginerpm-senecaii.d.ts"
+}

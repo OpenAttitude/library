@@ -1,0 +1,25 @@
+<svg
+   width="500"
+   height="500"
+   viewBox="0 0 500 500"
+   version="1.1"
+   preserveAspectRation="xMinYMin meet"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+
+  <path
+     style="fill:none;stroke:#000000;stroke-width:50"
+     d="M 475,250 A 225,225 0 0 1 250,475 225,225 0 0 1 25,250 225,225 0 0 1 250,25 225,225 0 0 1 475,250 Z" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-width:10"
+     d="M 260,25 A 10,10 0 0 1 250,35 10,10 0 0 1 240,25 10,10 0 0 1 250,15 10,10 0 0 1 260,25 Z" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-width:2.5"
+     d="M 250,50 V 40 m -39.93945,-16.505859 5.20898,29.544921 z m 79.8789,0 -5.20898,29.544921 z M 171.33594,33.871094 181.5957,62.060547 Z m 157.32812,0 -10.25976,28.189453 z M 130,42.154297 150,76.794922 Z m 240,0 -20,34.640625 z M 42.154297,130 76.794922,150 Z m 415.691403,0 -34.64062,20 z M 10,250 h 40 z m 440,0 h 40 z" />
+  <path
+     d="m 197,257 a 61,61 0 0 0 106,0"
+     style="stroke:black;stroke-width:5;fill:none;" />
+  <path
+     d="m 375,250 h -65 c -3.40562,0.93371 -6.06629,3.59438 -7,7 m -178,-7 h 65 c 3.40562,0.93371 6.06629,3.59438 7,7 m 58,-7 c 0,2.76142 -2.23858,5 -5,5 -2.76142,0 -5,-2.23858 -5,-5 0,-2.76142 2.23858,-5 5,-5 2.76142,0 5,2.23858 5,5 z"
+     style="stroke:white;stroke-width:5;fill:none;" />
+</svg>

@@ -1,0 +1,19 @@
+<svg width="500" height="500" viewBox="0 0 500 500" 
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+
+  <circle cx="250" cy="250" r="250" style="fill:#303030;stroke:#303030"/>
+  <text x="250" y="187.5" style="
+  fill:white;
+  stroke: none;
+  font-family: 'Montserrat', sans-serif;
+  dominant-baseline: middle;
+  text-anchor: middle;
+  text-align: center;
+  font-size: 20px;"
+>TURN COORDINATOR</text>
+
+  <path d="M 110 360 a 600 600 0 0 0 280 0 a 10 10 0 0 0 0 -45 a 600 600 0 0 1 -280 0 a 10 10 0 0 0 0 45 Z" style="stroke:gray;fill:white" />
+
+</svg>

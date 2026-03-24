@@ -1,0 +1,10 @@
+<svg
+   width="500"
+   height="500"
+   viewBox="0 0 500 500"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <path style="fill:#ffffff;stroke:#343434;stroke-width:1"
+       d="M 244.16,71.83 V 236.48 A 14.74,14.74 0 0 0 235.26,250 14.74,14.74 0 0 0 250,264.74 14.74,14.74 0 0 0 264.74,250 14.74,14.74 0 0 0 255.84,236.47 V 71.83 Z" />
+</svg>

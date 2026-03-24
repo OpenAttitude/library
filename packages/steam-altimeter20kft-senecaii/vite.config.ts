@@ -1,0 +1,30 @@
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import dts from 'vite-plugin-dts';
+import { fileURLToPath, URL } from 'node:url';
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    dts({
+      tsconfigPath: fileURLToPath(new URL('tsconfig.json', import.meta.url)),
+      insertTypesEntry: true,
+      logLevel: 'silent',
+    }),
+  ],
+  build: {
+    lib: {
+      entry: fileURLToPath(new URL('src/index.ts', import.meta.url)),
+      name: 'OpenAttitudeSteamAltimeter20kftSenecaII',
+      fileName: 'steam-altimeter20kft-senecaii',
+      formats: ['es'],
+    },
+    rollupOptions: {
+      external: ['vue', '@openattitude/core'],
+      output: {
+        assetFileNames: 'steam-altimeter20kft-senecaii[extname]',
+      },
+    },
+    sourcemap: true,
+  },
+});

@@ -1,0 +1,61 @@
+<svg
+   width="500"
+   height="500"
+   viewBox="0 0 500 500"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <circle cx="250" cy="250" r="225" 
+    style="fill:none;stroke:black;stroke-width:50" />
+
+  <line x1="450" y1="250" x2="490" y2="250" 
+    style="stroke:white;stroke-width:10;" />
+
+  <line x1="437.94" y1="318.40" x2="475.53" y2="332.08" 
+    style="stroke:white;stroke-width:10;" />
+
+  <line x1="62.06" y1="318.40" x2="24.47" y2="332.08"
+    style="stroke:white;stroke-width:10;" />
+
+  <line x1="50" y1="250" x2="10" y2="250"
+    style="stroke:white;stroke-width:10;" />
+
+  <text x="450.48" y="352.15" 
+    style="font-size:25px;
+    fill: white;
+    fill-opacity: 1;
+    stroke: none;
+    font-family: 'Montserrat', sans-serif;
+    dominant-baseline: middle;
+    text-anchor: middle;
+    text-align: center;
+    font-size: 20px;"
+  >R</text>
+
+  <text x="49.52" y="352.15" 
+    style="font-size:25px;
+    fill: white;
+    fill-opacity: 1;
+    stroke: none;
+    font-family: 'Montserrat', sans-serif;
+    dominant-baseline: middle;
+    text-anchor: middle;
+    text-align: center;
+    font-size: 20px;"
+  >L</text>
+
+  <text x="250" y="27.5"
+    style="font-size:25px;
+    fill: white;
+    fill-opacity: 1;
+    stroke: none;
+    font-family: 'Montserrat', sans-serif;
+    dominant-baseline: middle;
+    text-anchor: middle;
+    text-align: center;
+    font-size: 20px;"
+>D.C. ELEC</text>
+
+  <line id="slipline" x1="227" y1="330" x2="227" y2="378" stroke="black" stroke-width="4" fill="none" />
+  <use href="#slipline" transform="translate(46 0)" />
+</svg>

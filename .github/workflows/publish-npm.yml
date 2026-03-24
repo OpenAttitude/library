@@ -1,0 +1,78 @@
+# Publishes all public npm workspace packages using npm trusted publishing (OIDC).
+# No long-lived NPM_TOKEN for publishes—the CLI exchanges the GitHub OIDC token
+# with the registry when this workflow is listed as the trusted publisher.
+#
+# Prerequisites (npmjs.com)
+# - For each package under @openattitude/*: Package → Settings → Trusted publishing,
+#   add GitHub Actions with this repository and workflow filename: publish-npm.yml
+#   (filename only, case-sensitive, including .yml).
+# - Requires GitHub-hosted runners (self-hosted is not supported for npm OIDC yet).
+#
+# Optional: if npm install ever needs private registry packages, set NPM_READ_TOKEN
+# (read-only granular token) only on the install step—not for publish.
+#
+# Version bumps: publish fails if that version already exists. Keep instrument
+# packages’ "@openattitude/core": "^x.y.z" aligned when core’s semver line changes.
+#
+# Ref: https://docs.npmjs.com/trusted-publishers
+#
+# Triggers: manual run, or GitHub Release published.
+
+name: Publish to npm
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # required for GitHub → npm OIDC
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      # Trusted publishing requires npm CLI ≥ 11.5.1 (and Node ≥ 22.14).
+      - name: Update npm for OIDC publish
+        run: npm install -g npm@^11.5.1
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test --workspaces --if-present
+
+      - name: Publish workspaces to npm
+        run: |
+          set -euo pipefail
+          publish() { npm publish -w "$1" --access public; }
+          publish @openattitude/core
+          # publish @openattitude/other-gps-generic
+          # publish @openattitude/steam-airspeedindicator-senecaii
+          # publish @openattitude/steam-altimeter20kft-senecaii
+          # publish @openattitude/steam-attitudegyro-senecaii
+          # publish @openattitude/steam-clock-generic
+          # publish @openattitude/steam-egt-senecaii
+          # publish @openattitude/steam-engine-senecaii
+          # publish @openattitude/steam-enginerpm-senecaii
+          # publish @openattitude/steam-flapindicator-senecaii
+          # publish @openattitude/steam-fuelflow-senecaii
+          # publish @openattitude/steam-gyropressure-senecaii
+          # publish @openattitude/steam-ki209-generic
+          # publish @openattitude/steam-ki227-senecaii
+          # publish @openattitude/steam-ki525-generic
+          # publish @openattitude/steam-manifoldpressure-senecaii
+          # publish @openattitude/steam-turncoordinator-generic
+          # publish @openattitude/steam-verticalspeedindicator-generic

@@ -1,0 +1,15 @@
+<svg
+   width="500"
+   height="500"
+   viewBox="0 0 500 500"
+   version="1.1"
+   preserveAspectRatio="xMinYMin"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+
+  <path style="display:inline;fill:#f47e1b;stroke-width:4;stroke-linejoin:round"
+       d="m 424.66,78.17 -14.14,14.14 -2.83,-2.83 14.14,-14.14 z m -14.14,329.51 14.14,14.14 -2.83,2.83 -14.14,-14.14 z m -318.2,2.83 -14.14,14.14 -2.83,-2.83 14.14,-14.14 z M 78.17,75.34 92.32,89.49 89.49,92.32 75.34,78.17 Z M 257,5 252,25 h -4 L 243,5 Z m -5,20 v 32 h -4 V 25 Z m 0,450 v 20 h -4 V 475 Z M 475,248 h 20 v 4 H 475 Z M 5,248 h 20 v 4 H 5 Z" />
+
+  <path style="fill:#ffff5b;stroke-width:49.9994;stroke-linejoin:round"
+       d="m 247.5,231.52997 h 5 v 76.04497 h -5 z M 235,292.953 h 30 v 5 H 235 Z M 210,247.5 h 80 v 5 h -80 z" />
+</svg>

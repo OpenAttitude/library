@@ -1,0 +1,85 @@
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="linearGradient3802">
+      <stop
+         style="stop-color:#cc1f0a;stop-opacity:1;"
+         offset="0"
+         id="stop3804" />
+      <stop
+         id="stop3810"
+         offset="0.50000000"
+         style="stop-color:#cc1f0a;stop-opacity:0.93362832;" />
+      <stop
+         style="stop-color:#cc1f0a;stop-opacity:0.0044247787;"
+         offset="1.0000000"
+         id="stop3806" />
+    </linearGradient>
+    <linearGradient id="linearGradient6002">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop6004" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop6006" />
+    </linearGradient>
+    <radialGradient
+       href="#linearGradient3802"
+       id="radialGradient1"
+       cx="32"
+       cy="480"
+       fx="32"
+       fy="480"
+       r="32"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(109.99999,-97.999989)" />
+    <radialGradient
+       href="#linearGradient6002"
+       id="radialGradient3"
+       cx="19.022863"
+       cy="465.40555"
+       fx="19.022863"
+       fy="465.40555"
+       r="4.5439229"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.650556,0,0,1.650556,106.74189,-391.25198)" />
+    <radialGradient
+       href="#linearGradient3802"
+       id="radialGradient2"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1e-5,-447.99999)"
+       cx="32"
+       cy="480"
+       fx="32"
+       fy="480"
+       r="32" />
+    <radialGradient
+       href="#linearGradient6002"
+       id="radialGradient4"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.650556,0,0,1.650556,-3.25811,-741.25198)"
+       cx="19.022863"
+       cy="465.40555"
+       fx="19.022863"
+       fy="465.40555"
+       r="4.5439229" />
+  </defs>
+    <rect
+       style="fill:url(#radialGradient2);"
+       width="64"
+       height="64"
+       x="0"
+       y="0" />
+    <circle
+       style="fill:url(#radialGradient4);"
+       cx="28.140198"
+       cy="26.925934"
+       r="7.499999" />
+</svg>
