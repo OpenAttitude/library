@@ -14,11 +14,20 @@ import type {
  * Set `host` to `hostname` or `hostname:port`, then call `subscribe(path)` for each FG property path.
  */
 export const useFlightGearPanelPropertiesStore = defineStore('flightgear-panel-properties', () => {
+  /** Upper bound for property-apply frequency (protects CPU under very high WS rates). */
+  const MAX_FLUSH_FPS = 60;
+  const MIN_FLUSH_INTERVAL_MS = Math.ceil(1000 / MAX_FLUSH_FPS);
+
   const watchedProperties = new Map<string, WatchedProperty>();
+  const pendingUpdates = new Map<string, PropertyWireMessage>();
+  const unknownTypeWarnings = new Set<string>();
   const isConnected = ref(false);
   const host = ref('');
 
   let activeConnection: PanelPropertyConnection | null = null;
+  let flushScheduled = false;
+  let flushTimerId: number | null = null;
+  let lastFlushAtMs = 0;
 
   /**
    * When host is empty we are not using a backend; treat as serviceable (no OffSpinner).
@@ -47,13 +56,16 @@ export const useFlightGearPanelPropertiesStore = defineStore('flightgear-panel-p
       case 'double':
       case 'float':
       case 'int':
-        if (
-          Math.abs(Number(nodeEvent.value) - Number(prop.oldValue ?? 0)) > (prop.e || 0) / 100
-        ) {
-          prop.r.value = nodeEvent.value;
-          prop.oldValue = nodeEvent.value;
+      {
+        const nextValue = Number(nodeEvent.value);
+        if (Number.isNaN(nextValue)) break;
+        const prevValue = typeof prop.oldValue === 'number' ? prop.oldValue : Number(prop.oldValue ?? 0);
+        if (Math.abs(nextValue - prevValue) > (prop.e || 0) / 100) {
+          prop.r.value = nextValue;
+          prop.oldValue = nextValue;
         }
         break;
+      }
       case 'bool': {
         let v: unknown = nodeEvent.value;
         if (type !== nodeEvent.type) {
@@ -71,8 +83,31 @@ export const useFlightGearPanelPropertiesStore = defineStore('flightgear-panel-p
         break;
       }
       default:
-        console.error(`unknown type for ${JSON.stringify(nodeEvent)}`);
+        if (!unknownTypeWarnings.has(nodeEvent.path)) {
+          unknownTypeWarnings.add(nodeEvent.path);
+          console.error(`unknown type for ${JSON.stringify(nodeEvent)}`);
+        }
     }
+  }
+
+  function flushPendingUpdates(): void {
+    flushScheduled = false;
+    flushTimerId = null;
+    lastFlushAtMs = Date.now();
+    pendingUpdates.forEach((msg, path) => {
+      const subscription = watchedProperties.get(path);
+      if (!subscription) return;
+      applyPropertyUpdate(subscription, msg);
+    });
+    pendingUpdates.clear();
+  }
+
+  function scheduleFlush(): void {
+    if (flushScheduled) return;
+    flushScheduled = true;
+    const now = Date.now();
+    const waitMs = Math.max(0, MIN_FLUSH_INTERVAL_MS - (now - lastFlushAtMs));
+    flushTimerId = globalThis.setTimeout(flushPendingUpdates, waitMs);
   }
 
   function connect(): void {
@@ -94,17 +129,16 @@ export const useFlightGearPanelPropertiesStore = defineStore('flightgear-panel-p
       },
       onDisconnected: () => {
         isConnected.value = false;
+        pendingUpdates.clear();
       },
       onError: () => {
         isConnected.value = false;
+        pendingUpdates.clear();
       },
       onPropertyMessage: (msg) => {
-        const subscription = watchedProperties.get(msg.path);
-        if (!subscription) {
-          console.error(`Unwatched property ${msg.path} ignored`);
-          return;
-        }
-        applyPropertyUpdate(subscription, msg);
+        if (!watchedProperties.has(msg.path)) return;
+        pendingUpdates.set(msg.path, msg);
+        scheduleFlush();
       },
     });
   }
@@ -112,6 +146,20 @@ export const useFlightGearPanelPropertiesStore = defineStore('flightgear-panel-p
   function disconnect(): void {
     const c = activeConnection;
     activeConnection = null;
+    pendingUpdates.clear();
+    if (flushTimerId != null) {
+      if (
+        typeof globalThis !== 'undefined' &&
+        'cancelAnimationFrame' in globalThis &&
+        typeof globalThis.cancelAnimationFrame === 'function'
+      ) {
+        globalThis.cancelAnimationFrame(flushTimerId);
+      } else {
+        clearTimeout(flushTimerId);
+      }
+      flushTimerId = null;
+      flushScheduled = false;
+    }
     c?.disconnect();
     setServiceableForCurrentHost();
   }
