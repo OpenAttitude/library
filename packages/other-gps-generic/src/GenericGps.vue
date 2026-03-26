@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import L from 'leaflet';
-import { ref, watch, watchEffect, onMounted, onBeforeUnmount, unref } from 'vue';
+/** Must load with this module (not inside async init): Leaflet panes rely on these rules being live before `L.map()`. */
+import 'leaflet/dist/leaflet.css';
+import type { Map as LeafletMap, TileLayer } from 'leaflet';
+import { ref, watch, watchEffect, onMounted, onBeforeUnmount, unref, nextTick } from 'vue';
 import { installAircraftLayer } from './aircraft-icon';
 import aircraftMarkerUrl from './aircraft-marker.png';
-
-installAircraftLayer(L);
 
 const props = defineProps<{
   latitudeDeg?: number | null;
@@ -19,13 +19,24 @@ const props = defineProps<{
 }>();
 
 const mapContainer = ref<HTMLElement | null>(null);
-let map: L.Map | undefined;
-let aircraft: { setLatLng: (p: { lat: number; lng: number; heading: number }) => void; addTo: (m: L.Map) => void } | undefined;
-let openAipLayer: L.TileLayer | null = null;
+let map: LeafletMap | undefined;
+let aircraft:
+  | { setLatLng: (p: { lat: number; lng: number; heading: number }) => void; addTo: (m: LeafletMap) => void }
+  | undefined;
+let openAipLayer: TileLayer | null = null;
+/** Set after dynamic `import('leaflet')`; required for overlays and teardown. */
+let LRef: typeof import('leaflet').default | null = null;
+let disposed = false;
+
+/** Default map view (Hamburg area) when FG position is not available yet — matches initial `setView`. */
+const DEFAULT_LAT = 53.5;
+const DEFAULT_LNG = 10.0;
+const DEFAULT_ZOOM = 5;
 
 function syncOpenAipLayer(): void {
   const m = map;
-  if (!m) return;
+  const L = LRef;
+  if (!m || !L) return;
   if (openAipLayer) {
     m.removeLayer(openAipLayer);
     openAipLayer = null;
@@ -47,40 +58,58 @@ function syncOpenAipLayer(): void {
   ).addTo(m);
 }
 
-watchEffect(() => {
-  let zoom = unref(props.zoomLevel) ?? 5;
+function applyPropsToMap(): void {
+  const m = map;
+  const ac = aircraft;
+  if (!m || !ac) return;
+  let zoom = unref(props.zoomLevel) ?? DEFAULT_ZOOM;
   const maxZoom = 19;
   const minZoom = 5;
+  const latRaw = unref(props.latitudeDeg);
+  const lngRaw = unref(props.longitudeDeg);
+  const haveLivePosition = latRaw != null && lngRaw != null;
   const newPos = {
-    lat: unref(props.latitudeDeg) ?? 0,
-    lng: unref(props.longitudeDeg) ?? 0,
+    lat: haveLivePosition ? latRaw : DEFAULT_LAT,
+    lng: haveLivePosition ? lngRaw : DEFAULT_LNG,
     heading: unref(props.headingDeg) ?? 0,
   };
-  if (map && aircraft) {
-    if (zoom < minZoom) zoom = minZoom;
-    if (zoom > maxZoom) zoom = maxZoom;
-    const rad = (newPos.heading * Math.PI) / 180;
-    const size = map.getSize();
-    const offsetPx = {
-      x: -Math.sin(rad) * (size.x / 3),
-      y: Math.cos(rad) * (size.y / 3),
-    };
-    const targetPoint = map.project(newPos, zoom);
-    const centerPoint = targetPoint.subtract([offsetPx.x, offsetPx.y]);
-    const newCenter = map.unproject(centerPoint, zoom);
-    map.setView(newCenter, zoom);
-    aircraft.setLatLng(newPos);
-  }
+  if (zoom < minZoom) zoom = minZoom;
+  if (zoom > maxZoom) zoom = maxZoom;
+  const rad = (newPos.heading * Math.PI) / 180;
+  const size = m.getSize();
+  const offsetPx = {
+    x: -Math.sin(rad) * (size.x / 3),
+    y: Math.cos(rad) * (size.y / 3),
+  };
+  const targetPoint = m.project(newPos, zoom);
+  const centerPoint = targetPoint.subtract([offsetPx.x, offsetPx.y]);
+  const newCenter = m.unproject(centerPoint, zoom);
+  m.setView(newCenter, zoom);
+  ac.setLatLng(newPos);
+}
+
+watchEffect(() => {
+  unref(props.latitudeDeg);
+  unref(props.longitudeDeg);
+  unref(props.headingDeg);
+  unref(props.zoomLevel);
+  applyPropsToMap();
 });
 
-onMounted(() => {
+async function initMap(): Promise<void> {
+  const leafletMod = await import('leaflet');
+  const L = leafletMod.default;
+  if (disposed) return;
+  LRef = L;
+  installAircraftLayer(L);
+
   const el = mapContainer.value;
-  if (!el) return;
+  if (!el || disposed) return;
 
   map = L.map(el, {
     zoomControl: false,
     attributionControl: false,
-  }).setView([53.5, 10.0], 5);
+  }).setView([DEFAULT_LAT, DEFAULT_LNG], DEFAULT_ZOOM);
 
   L.tileLayer('//a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
     minZoom: 5,
@@ -103,6 +132,16 @@ onMounted(() => {
 
   aircraft = (L as unknown as { aircraft: typeof L.marker }).aircraft(map.getCenter(), { heading: 220 });
   aircraft.addTo(map);
+
+  await nextTick();
+  await new Promise<void>((r) => requestAnimationFrame(() => r()));
+  if (disposed || !map) return;
+  map.invalidateSize?.();
+  applyPropsToMap();
+}
+
+onMounted(() => {
+  void initMap();
 });
 
 watch(
@@ -111,10 +150,12 @@ watch(
 );
 
 onBeforeUnmount(() => {
+  disposed = true;
   openAipLayer = null;
   map?.remove();
   map = undefined;
   aircraft = undefined;
+  LRef = null;
 });
 </script>
 
