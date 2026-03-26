@@ -1,8 +1,13 @@
 {
   "name": "@openattitude/steam-turncoordinator-generic",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Steam-style turn coordinator + slip/skid",
   "author": "Torsten Dreyer <torsten@t3r.de>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenAttitude/library.git",
+    "directory": "packages/steam-turncoordinator-generic"
+  },
   "type": "module",
   "main": "./dist/steam-turncoordinator-generic.js",
   "module": "./dist/steam-turncoordinator-generic.js",
@@ -18,7 +23,7 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@openattitude/core": "^0.1.0"
+    "@openattitude/core": "^0.1.2"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

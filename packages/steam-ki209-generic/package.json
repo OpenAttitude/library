@@ -1,8 +1,13 @@
 {
   "name": "@openattitude/steam-ki209-generic",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Steam-style KI 209 VOR/ILS indicator",
   "author": "Torsten Dreyer <torsten@t3r.de>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenAttitude/library.git",
+    "directory": "packages/steam-ki209-generic"
+  },
   "type": "module",
   "main": "./dist/steam-ki209-generic.js",
   "module": "./dist/steam-ki209-generic.js",
@@ -18,7 +23,7 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@openattitude/core": "^0.1.0"
+    "@openattitude/core": "^0.1.2"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

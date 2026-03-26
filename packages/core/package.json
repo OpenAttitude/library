@@ -1,8 +1,13 @@
 {
   "name": "@openattitude/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Shared utilities for OpenAttitude panel packages",
   "author": "Torsten Dreyer <torsten@t3r.de>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenAttitude/library.git",
+    "directory": "packages/core"
+  },
   "type": "module",
   "main": "./dist/core.js",
   "module": "./dist/core.js",

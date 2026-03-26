@@ -1,8 +1,13 @@
 {
   "name": "@openattitude/other-gps-generic",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "GPS moving-map tile view for OpenAttitude",
   "author": "Torsten Dreyer <torsten@t3r.de>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenAttitude/library.git",
+    "directory": "packages/other-gps-generic"
+  },
   "type": "module",
   "main": "./dist/other-gps-generic.js",
   "module": "./dist/other-gps-generic.js",
