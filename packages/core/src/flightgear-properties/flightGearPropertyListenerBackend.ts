@@ -1,4 +1,3 @@
-import { unref, watch, type WatchStopHandle } from 'vue';
 import { useWebSocket } from '@vueuse/core';
 import type { PanelPropertyBackend, PanelPropertyBackendListeners, PanelPropertyConnection } from './types';
 
@@ -11,21 +10,16 @@ export function createFlightGearPropertyListenerBackend(): PanelPropertyBackend 
     id: 'flightgear-property-listener',
     connect(endpoint: string, listeners: PanelPropertyBackendListeners): PanelPropertyConnection {
       const wsUrl = `ws://${endpoint}/PropertyListener`;
-      let stopDataWatch: WatchStopHandle | null = null;
 
-      const { data, send, close } = useWebSocket(wsUrl, {
+      const { send, close } = useWebSocket(wsUrl, {
         autoReconnect: { delay: 10_000 },
         onConnected: () => listeners.onConnected(),
         onDisconnected: () => listeners.onDisconnected(),
         onError: () => listeners.onError?.(),
-      });
-
-      stopDataWatch = watch(
-        data,
-        (value) => {
+        onMessage: (_, event) => {
           let node: unknown;
           try {
-            node = JSON.parse(unref(value) as string);
+            node = JSON.parse(String(event.data));
           } catch {
             console.error('invalid JSON data from PropertyListener ignored');
             return;
@@ -38,13 +32,10 @@ export function createFlightGearPropertyListenerBackend(): PanelPropertyBackend 
             type: n.type,
           });
         },
-        { flush: 'sync' },
-      );
+      });
 
       return {
         disconnect() {
-          stopDataWatch?.();
-          stopDataWatch = null;
           close();
         },
         requestSubscription(path: string) {
