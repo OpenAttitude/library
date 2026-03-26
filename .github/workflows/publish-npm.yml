@@ -11,8 +11,11 @@
 # Optional: if npm install ever needs private registry packages, set NPM_READ_TOKEN
 # (read-only granular token) only on the install step—not for publish.
 #
-# Version bumps: publish fails if that version already exists. Keep instrument
-# packages’ "@openattitude/core": "^x.y.z" aligned when core’s semver line changes.
+# Publishes only workspaces whose current version is not yet on npm (see
+# publish step). Bump versions only for packages you intend to release; the
+# rest are skipped. Publish @openattitude/core before dependents when core
+# changes. Keep "@openattitude/core": "^x.y.z" aligned when core’s semver
+# line changes.
 #
 # Ref: https://docs.npmjs.com/trusted-publishers
 #
@@ -57,22 +60,40 @@ jobs:
       - name: Publish workspaces to npm
         run: |
           set -euo pipefail
-          publish() { npm publish -w "$1" --access public; }
-          publish @openattitude/core
-          # publish @openattitude/other-gps-generic
-          # publish @openattitude/steam-airspeedindicator-senecaii
-          # publish @openattitude/steam-altimeter20kft-senecaii
-          # publish @openattitude/steam-attitudegyro-senecaii
-          # publish @openattitude/steam-clock-generic
-          # publish @openattitude/steam-egt-senecaii
-          # publish @openattitude/steam-engine-senecaii
-          # publish @openattitude/steam-enginerpm-senecaii
-          # publish @openattitude/steam-flapindicator-senecaii
-          # publish @openattitude/steam-fuelflow-senecaii
-          # publish @openattitude/steam-gyropressure-senecaii
-          # publish @openattitude/steam-ki209-generic
-          # publish @openattitude/steam-ki227-senecaii
-          # publish @openattitude/steam-ki525-generic
-          # publish @openattitude/steam-manifoldpressure-senecaii
-          # publish @openattitude/steam-turncoordinator-generic
-          # publish @openattitude/steam-verticalspeedindicator-generic
+          # npm view / publish use the registry from setup-node (registry.npmjs.org).
+          # @openattitude/core first; then remaining workspaces (order for consistency).
+          PACKAGES=(
+            @openattitude/core
+            @openattitude/other-gps-generic
+            @openattitude/steam-airspeedindicator-senecaii
+            @openattitude/steam-altimeter20kft-senecaii
+            @openattitude/steam-attitudegyro-senecaii
+            @openattitude/steam-clock-generic
+            @openattitude/steam-egt-senecaii
+            @openattitude/steam-engine-senecaii
+            @openattitude/steam-enginerpm-senecaii
+            @openattitude/steam-flapindicator-senecaii
+            @openattitude/steam-fuelflow-senecaii
+            @openattitude/steam-gyropressure-senecaii
+            @openattitude/steam-ki209-generic
+            @openattitude/steam-ki227-senecaii
+            @openattitude/steam-ki525-generic
+            @openattitude/steam-manifoldpressure-senecaii
+            @openattitude/steam-turncoordinator-generic
+            @openattitude/steam-verticalspeedindicator-generic
+          )
+          published=0
+          skipped=0
+          for pkg in "${PACKAGES[@]}"; do
+            dir="${pkg#@openattitude/}"
+            ver="$(jq -r '.version' "packages/${dir}/package.json")"
+            if npm view "${pkg}@${ver}" version >/dev/null 2>&1; then
+              echo "Skip ${pkg}@${ver} (already on npm)"
+              skipped=$((skipped + 1))
+              continue
+            fi
+            echo "Publish ${pkg}@${ver}"
+            npm publish -w "$pkg" --access public
+            published=$((published + 1))
+          done
+          echo "Done. Published ${published} package(s), skipped ${skipped} unchanged version(s)."
