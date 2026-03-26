@@ -50,3 +50,9 @@ git push -u origin main
 During development, **fgpanel** expects this repository as a **sibling directory** named `openattitude-instruments`, with `file:` dependencies in its `package.json`.
 
 To use a **Git remote** instead, publish these packages to npm (or GitHub Packages) and replace `file:` entries in fgpanel with semver ranges.
+
+## Publishing to npm
+
+Releases use **GitHub Actions** (`.github/workflows/publish-npm.yml`) with **trusted publishing (OIDC)**. Each `@openattitude/*` package on [npmjs.com](https://www.npmjs.com) must list that workflow under **Package → Settings → Trusted publishing**.
+
+If **`npm publish` reports 404** (“could not be found or you do not have permission”) while OIDC is configured, use **npm ≥11.6.2** (older 11.5.x often misreports trusted-publishing failures as 404; see [npm/cli#9088](https://github.com/npm/cli/issues/9088)). The workflow upgrades npm before publishing; for local publishes run `npm install -g 'npm@^11.6.2'`.

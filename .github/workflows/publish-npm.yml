@@ -19,6 +19,10 @@
 #
 # Ref: https://docs.npmjs.com/trusted-publishers
 #
+# If publish fails with 404 / “could not be found or you do not have permission” while OIDC
+# and the Trusted publisher UI look correct, upgrade npm first: older npm 11.5.x can mis-report
+# trusted-publishing failures as 404. Pin ≥11.6.2 in the step below (see npm/cli#9088).
+#
 # Triggers: manual run, or GitHub Release published.
 
 name: Publish to npm
@@ -47,9 +51,12 @@ jobs:
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
-      # Trusted publishing requires npm CLI ≥ 11.5.1 (and Node ≥ 22.14).
+      # Trusted publishing: npm 11.5.x can falsely return E404 / ENEEDAUTH; use ≥11.6.2.
+      # Node 24 + registry from setup-node is fine; npm is upgraded globally for the job only.
       - name: Update npm for OIDC publish
-        run: npm install -g npm@^11.5.1
+        run: |
+          npm install -g 'npm@^11.6.2'
+          npm --version
 
       - name: Install dependencies
         run: npm ci
@@ -87,7 +94,8 @@ jobs:
           for pkg in "${PACKAGES[@]}"; do
             dir="${pkg#@openattitude/}"
             ver="$(jq -r '.version' "packages/${dir}/package.json")"
-            if npm view "${pkg}@${ver}" version >/dev/null 2>&1; then
+            # First-time packages are not on the registry yet: npm view returns 404 (expected).
+            if npm view "${pkg}@${ver}" version --loglevel=silent >/dev/null 2>&1; then
               echo "Skip ${pkg}@${ver} (already on npm)"
               skipped=$((skipped + 1))
               continue
