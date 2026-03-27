@@ -57,5 +57,9 @@
     "vue"
   ],
   "license": "LGPL-3.0-or-later",
-  "types": "./dist/other-gps-generic.d.ts"
+  "types": "./dist/other-gps-generic.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }
