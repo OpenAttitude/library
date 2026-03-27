@@ -1,0 +1,62 @@
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: monthly
+    # Single root lockfile covers all workspaces.
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+    groups:
+      vue-ecosystem:
+        patterns:
+          - "vue"
+          - "@vue/*"
+      vite-and-types:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+          - "vite-plugin-dts"
+          - "rolldown*"
+          - "typescript"
+          - "@types/*"
+      eslint:
+        patterns:
+          - "eslint*"
+          - "@eslint/*"
+          - "typescript-eslint"
+          - "@typescript-eslint/*"
+          - "globals"
+      test:
+        patterns:
+          - "vitest*"
+          - "@vitest/*"
+          - "happy-dom"
+          - "@vue/test-utils"
+      pinia-and-vueuse:
+        patterns:
+          - "pinia"
+          - "@vueuse/*"
+      leaflet:
+        patterns:
+          - "leaflet"
+      openattitude-workspace:
+        patterns:
+          - "@openattitude/*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+    groups:
+      actions:
+        patterns:
+          - "*"
