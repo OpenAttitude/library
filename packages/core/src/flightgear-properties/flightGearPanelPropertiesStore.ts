@@ -197,7 +197,7 @@ export const useFlightGearPanelPropertiesStore = defineStore('flightgear-panel-p
     watchedProperties.set(path, {
       ...subscription,
       trace: false,
-      e: 0.0,
+      e: subscription?.e ?? 0.0,
       oldValue: null,
       r,
     });

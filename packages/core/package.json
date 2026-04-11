@@ -1,6 +1,6 @@
 {
   "name": "@openattitude/core",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Shared utilities for OpenAttitude panel packages",
   "author": "Torsten Dreyer <torsten@t3r.de>",
   "repository": {
