@@ -22,6 +22,8 @@ export interface PanelPropertyConnection {
   disconnect(): void;
   /** Register interest in `path` and request current value (semantics depend on backend). */
   requestSubscription(path: string): void;
+  /** Send a raw JSON line (FlightGear PropertyListener supports e.g. `{ command: "exec", ... }`). */
+  sendRaw?(text: string): void;
 }
 
 export interface PanelPropertyBackendListeners {

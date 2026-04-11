@@ -82,6 +82,15 @@ export const useFlightGearPanelPropertiesStore = defineStore('flightgear-panel-p
         }
         break;
       }
+      case 'string':
+      case 'unspecified': {
+        const sv = nodeEvent.value != null ? String(nodeEvent.value) : '';
+        if (sv !== prop.oldValue) {
+          prop.r.value = sv;
+          prop.oldValue = sv;
+        }
+        break;
+      }
       default:
         if (!unknownTypeWarnings.has(nodeEvent.path)) {
           unknownTypeWarnings.add(nodeEvent.path);
@@ -203,5 +212,10 @@ export const useFlightGearPanelPropertiesStore = defineStore('flightgear-panel-p
     throw new Error(`unsubscribing from ${_path} not implemented`);
   }
 
-  return { connect, disconnect, subscribe, unsubscribe, isConnected, host };
+  /** Send a raw JSON payload on the active PropertyListener WebSocket (e.g. `{ command: "exec", fgcommand: "timeofday", ... }`). */
+  function sendPropertyListenerRaw(text: string): void {
+    activeConnection?.sendRaw?.(text);
+  }
+
+  return { connect, disconnect, subscribe, unsubscribe, sendPropertyListenerRaw, isConnected, host };
 });
