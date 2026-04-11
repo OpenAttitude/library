@@ -96,6 +96,22 @@ The default backend opens:
 
 and sends JSON commands `addListener` / `get` for each subscribed path, matching FlightGear’s generic **PropertyListener** WebSocket.
 
+### 4. fgcommands and property writes (same `--httpd` port)
+
+FlightGear exposes **`POST /run.cgi?value=<command>`** (JSON body → command args) and **`POST /json/<path>`** (set a property), and the PropertyListener WebSocket **`{ "command": "exec", "fgcommand": "…", … }`** path — all ultimately call the same fgcommand machinery (`RunUriHandler.cxx`, `PropertyChangeWebsocket.cxx`). This package prefers **WebSocket `exec`** for commands (avoids HTTP/CORS issues with `/run.cgi`):
+
+| Export | Purpose |
+|--------|---------|
+| **`sendFgExecCommand(sendRaw, fgcommand, args?)`** | Send `exec` on an **existing** PropertyListener socket (e.g. `useFlightGearPanelPropertiesStore().sendPropertyListenerRaw`). |
+| **`runFgHttpCommand({ host, command, args? })`** | Opens a short-lived `ws://…/PropertyListener`, sends `exec`, then closes (same payload as `/run.cgi`). |
+| **`buildFgExecWebSocketJson(fgcommand, args)`** | Low-level JSON line for `exec`. |
+| **`buildTimeOfDayCommandArgs(type, offset?)`** | Args for the `timeofday` command (`real`, `dawn`, `noon`, …). |
+| **`setFgHttpProperty({ host, propertyPath, value })`** | POST `{ value }` to `/json/<path>` for a leaf write. |
+| **`flightGearHttpBaseUrl(host)`** | Normalizes `host:port` → `http://…` |
+| **`flightGearPropertyListenerWsUrl(host)`** | `ws://…/PropertyListener` |
+
+Use the **same host and port** as PropertyListener (FlightGear `--httpd`).
+
 ---
 
 ## API reference

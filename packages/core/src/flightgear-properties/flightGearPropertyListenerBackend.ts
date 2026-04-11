@@ -42,6 +42,9 @@ export function createFlightGearPropertyListenerBackend(): PanelPropertyBackend 
           send(JSON.stringify({ command: 'addListener', node: path }));
           send(JSON.stringify({ command: 'get', node: path }));
         },
+        sendRaw(text: string) {
+          send(text);
+        },
       };
     },
   };

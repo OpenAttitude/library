@@ -13,3 +13,4 @@ export {
   setPanelPropertyBackendFactory,
 } from './panelPropertyBackendRegistry';
 export { useFlightGearPanelPropertiesStore } from './flightGearPanelPropertiesStore';
+export { buildFgExecWebSocketJson, sendFgExecCommand } from './propertyListenerExec';
